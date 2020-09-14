@@ -1,24 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useState, useEffect} from 'react';
 import './App.css';
+import axios from 'axios'
+import { SearchField } from './components/SearchField'
+import { Issues } from './components/Issues'
+import { Loading } from './components/Loading'
 
 function App() {
+
+  const [search, setSearch] = useState('')
+  const [issues, setIssues] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  const handleChange = e => {
+    setSearch(e.target.value)
+  }
+
+  const filterIssues = issues.filter(issue => issue.title.toLowerCase().includes(search.toLocaleLowerCase()))
+
+  const getIssuesRequest = () => {
+    const dataRequest = axios.get('https://api.github.com/repos/facebook/react/issues')
+    dataRequest.then(response => {
+      const { data } = response;
+      setIssues(data)
+      setIsLoading(false)
+    }).catch(e => alert(e.message))
+  }
+
+  useEffect(() =>{
+    setTimeout(() => getIssuesRequest(), 1000)
+  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+     <SearchField handleChange={handleChange} value={search} results={filterIssues.length}/>
+     {
+       !isLoading ? <Issues issues={filterIssues} /> : <Loading />
+     }
     </div>
   );
 }

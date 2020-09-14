@@ -1,0 +1,31 @@
+@media(min-width: 320px) {
+  .List {
+    list-style: none;
+  }
+
+  .List__Item{
+    border: 1px solid var(--whitegray);
+    padding: 20px 10px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+  }
+
+  .List__Item:hover {
+    background: var(--whitegray);
+  }
+
+  .List__Link {
+    text-decoration: none;
+    color: var(--backgray);
+  }
+
+  .List__Link:hover {
+    color:var(--blue);
+  }
+
+  .List__Info {
+    font-size: 0.9rem;
+    font-weight: normal;
+  }
+}
